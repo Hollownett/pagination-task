@@ -1,6 +1,6 @@
 import React,{useState, useEffect, useRef} from 'react';
 import API from "./utils/API";
-import { People } from "./components/People"
+import { People } from "./components/People/People"
 import './App.css';
 
 function App() {
