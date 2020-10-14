@@ -1,16 +1,29 @@
 import React from "react";
-import "./Header.css";
-import { NavLink } from "react-router-dom";
+import { AppHeader, HeaderButton, HeaderButtonsContainer, AppTitle, HederLink } from "./components"
 
 export const Header = (props) => {
   return (
-    <div className="Header">
-      <NavLink exact activeStyle={{ color: "white" }} to="/">
+    <AppHeader>
+      <AppTitle>
+        SWAPI
+      </AppTitle>
+      <HeaderButtonsContainer>
+        <HederLink exact  to="/">
+        <HeaderButton>
         People
-      </NavLink>
-      <NavLink exact activeStyle={{ color: "white" }} to="/planets">
+        </HeaderButton>
+       </HederLink>
+      <HederLink exact to="/planets">
+      <HeaderButton>
         Planets
-      </NavLink>
-    </div>
+       </HeaderButton>
+      </HederLink>
+      <HederLink exact to="/films">
+      <HeaderButton>
+        Films
+       </HeaderButton>
+      </HederLink>
+      </HeaderButtonsContainer>
+    </AppHeader>
   );
 };
