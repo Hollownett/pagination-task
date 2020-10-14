@@ -25,6 +25,7 @@ export const Planet = (props) => {
       <li>rotation period:<b>{rotation_period}</b></li>
       <li>orbital period: <b>{orbital_period}</b></li>
       <li>diameter <b>{diameter}</b></li>
+      <li>gravity <b>{gravity}</b></li>
       <li>climate: <b>{climate} </b></li>
       <li>terrain: <b>{terrain}</b></li>
       <li>surface water: <b>{surface_water}</b></li>

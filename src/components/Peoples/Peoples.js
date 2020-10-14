@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../../utils/API";
 import { People } from "./People/People";
 import InfiniteScroll from "react-infinite-scroll-component";

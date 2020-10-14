@@ -20,7 +20,6 @@ const Planets = () => {
     try {
       let morePlanet = await API.get(url);
       morePlanet = morePlanet.data.results;
-      console.log(morePlanet)
       await Promise.all(
         morePlanet.map(async (item) => {
           item.resident = await handleResidetns(item.residents);
@@ -38,7 +37,6 @@ const Planets = () => {
   };
 
   const handleResidetns = async (residents) => {
-    console.log(residents);
     const planetResidents = [];
     try {
       await Promise.all(
@@ -46,7 +44,6 @@ const Planets = () => {
         let planetResident = await API.get(resident);
         planetResidents.push(planetResident.data.name);
       }))
-      console.log(planetResidents);
       return planetResidents;
     } catch (e) {
       console.log(e);
