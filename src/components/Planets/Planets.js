@@ -1,59 +1,30 @@
-import React, { useState, useEffect } from "react";
-import API from "../../utils/API";
-import { Planet } from "./Planet/Planet";
-import InfiniteScroll from "react-infinite-scroll-component";
-import Loader from "react-loader-spinner";
+import React, { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { Planet } from "./Planet/Planet"
+import InfiniteScroll from "react-infinite-scroll-component"
+import Loader from "react-loader-spinner"
 import { PlanetsContainer } from "./components"
+import { getPlanets } from "../../actions/actions"
 
 const Planets = () => {
-  const [data, setData] = useState({
-    planet: [],
-  });
+  const planets =  useSelector(state => state.planets.planets)
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    handlePlanetsFromApi(`planets/?page=${page}`);
+     dispatch(getPlanets(page))
   }, [page]);
-
-  const handlePlanetsFromApi = async (url) => {
-    try {
-      let morePlanet = await API.get(url);
-      morePlanet = morePlanet.data.results;
-      await Promise.all(
-        morePlanet.map(async (item) => {
-          item.resident = await handleResidetns(item.residents);
-        })
-      );
-      setData({ planet: data.planet.concat(morePlanet) });
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const handlePage = () => {
     if (page <= 8) setPage((page) => page + 1);
     else setHasMore(false);
   };
 
-  const handleResidetns = async (residents) => {
-    const planetResidents = [];
-    try {
-      await Promise.all(
-      residents.map( async (resident) => {
-        let planetResident = await API.get(resident);
-        planetResidents.push(planetResident.data.name);
-      }))
-      return planetResidents;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
     <PlanetsContainer>
       <InfiniteScroll
-        dataLength={data.planet.length}
+        dataLength={planets.length}
         next={handlePage}
         style={{
           display: "flex",
@@ -77,7 +48,7 @@ const Planets = () => {
           </p>
         }
       >
-        {data.planet.map((item, index) => {
+        {planets.map((item, index) => {
           return (
             <Planet
               key={index}

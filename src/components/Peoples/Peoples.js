@@ -1,55 +1,30 @@
 import React, { useState, useEffect } from "react";
-import API from "../../utils/API";
+import { useDispatch, useSelector } from 'react-redux'
 import { People } from "./People/People";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
 import { PeoplesContainer } from "./components"
+import { getPeoples } from "../../actions/actions";
 
 const Peoples = () => {
-  const [data, setData] = useState({
-    people: [],
-  });
+  const peoples =  useSelector(state => state.peoples.peoples)
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); 
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    handlePeopleFromApi(`people/?page=${page}`);
+    dispatch(getPeoples(page))
   }, [page]);
-
-  const handlePeopleFromApi = async (url) => {
-    try {
-      let morePeople = await API.get(url);
-      morePeople = morePeople.data.results;
-      await Promise.all(
-        morePeople.map(async (item) => {
-          item.homeworld = await handleHomeWorld(item.homeworld);
-        })
-      );
-      setData({ people: data.people.concat(morePeople) });
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const handlePage = () => {
     if (page <= 8) setPage((page) => page + 1);
     else setHasMore(false);
   };
 
-  const handleHomeWorld = async (world) => {
-    try {
-      let homeWorld = await API.get(world);
-      homeWorld = homeWorld.data.name;
-      return homeWorld;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
     <PeoplesContainer>
       <InfiniteScroll
-        dataLength={data.people.length}
+        dataLength={peoples.length}
         next={handlePage}
         style={{
           display: "flex",
@@ -73,7 +48,7 @@ const Peoples = () => {
           </p>
         }
       >
-        {data.people.map((item, index) => {
+        {peoples.map((item, index) => {
           return (
             <People
               key={index}
