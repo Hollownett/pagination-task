@@ -1,20 +1,14 @@
 import * as action from "../constants/actions"
-
+import { createAction } from "redux-actions"
 // Worker triggering acions
 
-const getPeoples = page => {
-    return {type: action.GET_PEOPLES_REQUEST, payload: page }
-}
+const getPeoples = createAction(action.GET_PEOPLES_REQUEST, page => page)
 
-const getPlanets = page => {
-    return {type: action.GET_PLANETS_REQUEST, payload: page }
-}
+const getPlanets = createAction(action.GET_PLANETS_REQUEST, page => page)
 
-const getFilms = () => {
-    return {type: action.GET_FILMS_REQUEST }
-}
+const getFilms = createAction(action.GET_FILMS_REQUEST) 
 
-// Redux state triggerong actions 
+// Redux state triggering actions 
 
 // action creators for Peoples
 const getPeoplesError = error => {
