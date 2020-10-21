@@ -18,7 +18,7 @@ export const Film = (props) => {
   return (
     <FilmDataContainer>
       <h1>{title}</h1>
-      <img src={img} width="100%" height="100%" />
+      <img src={img} width="100%" height="100%" alt="film image"/>
       <ul>
       <li>episode :<b>{episode_id}</b></li>
       <li>opening : <b>{opening_crawl}</b></li>

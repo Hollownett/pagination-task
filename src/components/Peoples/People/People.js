@@ -18,7 +18,7 @@ export const People = (props) => {
   return (
     <PeopleContainer>
       <h2>{name}</h2>
-      <img src={img} width="100%" height="100%" />
+      <img src={img} width="100%" height="100%" alt="people image"/>
       <ul>
       <li>height:<b>{height}</b></li>
       <li>mass:<b>{mass}</b></li>

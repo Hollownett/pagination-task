@@ -20,7 +20,7 @@ export const Planet = (props) => {
   return (
     <PlanetDataContainer>
       <h1>{name}</h1>
-      <img src={img} width="100%" height="100%" />
+      <img src={img} width="100%" height="100%" alt="planet image"/>
       <ul>
       <li>rotation period:<b>{rotation_period}</b></li>
       <li>orbital period: <b>{orbital_period}</b></li>
