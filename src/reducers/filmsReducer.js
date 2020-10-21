@@ -1,4 +1,5 @@
 import * as actions from "../constants/actions"
+import { handleActions } from "redux-actions"
 
 const INITIAL_STATE = {
     films: [],
@@ -6,18 +7,17 @@ const INITIAL_STATE = {
     fetching: false,
 }
 
-const filmsReducer = ( state = INITIAL_STATE, action ) => {
-   switch(action.type){
-       case actions.GET_FILMS_REQUEST: 
-         return { ...state, fetching: true, };
-       case actions.GET_FILMS_SUCCESS: 
-         let allFilms = state.films.concat(action.payload)
-         return { ...state, fetching: false, films: allFilms }
-       case actions.GET_PLANETS_ERROR:
-         return { ...state, fetching: false, error: action.error }  
-       default: 
-         return { ...state } 
+const filmsReducer = handleActions({
+   [actions.GET_FILMS_REQUEST]: (state) => {
+     return {...state, fetching: true}
+   },
+   [actions.GET_FILMS_SUCCESS]: (state, action) => { 
+    let allFilms = state.films.concat(action.payload)
+     return {...state, fetchin: false, films: allFilms} 
+   },
+   [actions.GET_FILMS_ERROR]: (state, action) => {
+     return {...state, fetching: false, error: action.payload}
    }
-} 
+},INITIAL_STATE)
 
 export { filmsReducer }

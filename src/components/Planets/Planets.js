@@ -4,7 +4,7 @@ import { Planet } from "./Planet/Planet"
 import InfiniteScroll from "react-infinite-scroll-component"
 import Loader from "react-loader-spinner"
 import { PlanetsContainer } from "./components"
-import { getPlanets } from "../../actions/actions"
+import { getPlanetsRequest } from "../../actions/actions"
 
 const Planets = () => {
   const planets =  useSelector(state => state.planets.planets)
@@ -13,7 +13,7 @@ const Planets = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-     dispatch(getPlanets(page))
+     dispatch(getPlanetsRequest(page))
   }, [page]);
 
   const handlePage = () => {
@@ -61,7 +61,7 @@ const Planets = () => {
               terrain={item.terrain}
               surface_water = {item.surface_water}
               population = {item.population}
-              resident={item.resident}
+              resident={item.residents}
             />
           );
         })}

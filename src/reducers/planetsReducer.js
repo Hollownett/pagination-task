@@ -1,4 +1,5 @@
 import * as actions from "../constants/actions"
+import { handleActions } from "redux-actions";
 
 const INITIAL_STATE = {
     planets: [],
@@ -6,18 +7,17 @@ const INITIAL_STATE = {
     fetching: false,
 }
 
-const planetsReducer = ( state = INITIAL_STATE, action ) => {
-   switch(action.type){
-       case actions.GET_PLANETS_REQUEST: 
-         return { ...state, fetching: true, };
-       case actions.GET_PLANETS_SUCCESS: 
-         let allPlanets = state.planets.concat(action.payload)
-         return { ...state, fetching: false, planets: allPlanets }
-       case actions.GET_PLANETS_ERROR:
-         return { ...state, fetching: false, error: action.error }  
-       default: 
-         return { ...state } 
+const planetsReducer = handleActions({
+   [actions.GET_PLANETS_REQUEST]: (state) => {
+    return { ...state, fetching: true };
+   },
+   [actions.GET_PLANETS_SUCCESS]: (state, action) => { 
+    let allPlanets = state.planets.concat(action.payload)
+     return {...state,  fetching: false, planets: allPlanets }
+   },
+   [actions.GET_PLANETS_ERROR]: (state, action) => {
+     return {...state, fetching: true, error: action.payload}
    }
-} 
+}, INITIAL_STATE)
 
 export { planetsReducer }

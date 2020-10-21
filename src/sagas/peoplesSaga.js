@@ -1,25 +1,27 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import API from "../utils/API"
 import * as actions from "../constants/actions"
-import { fillPeoples, getPeoplesError }  from "../actions/actions"
+import { getPeoplesSuccess , getPeoplesError }  from "../actions/actions"
 
  function*  fetchPeoples(page){ 
-  let morePeople = yield call(API.get,`people/?page=${page}`);
-  morePeople = morePeople.data.results;
-  const [homeworld] = yield all([...morePeople.map( (item) => {
-    return  call(handleHomeWorld,item.homeworld);
-     })])
-     morePeople.map( (item) => {
-      item.homeworld = homeworld
-       })
-     return morePeople;
+    try {
+      let morePeople = yield call(API.get,`people/?page=${page}`);
+      morePeople = morePeople.data.results;
+      yield all([...morePeople.map( (item) => {
+      return  call(handleHomeWorld,item);
+      })])
+      return morePeople;
+     } catch(e) {
+         console.log(e)
+   }
+  
 }
 
-function* handleHomeWorld(world){
+function* handleHomeWorld(people){
     try {
-      let homeWorld = yield call(API.get, world);
-      world = homeWorld.data.name;
-      return world;
+      let homeWorld = yield call(API.get, people.homeworld);
+      people.homeworld = homeWorld.data.name;
+      return people;
     } catch (e) {
       console.log(e);
     }
@@ -30,7 +32,7 @@ export function* getPeoplesActionEffect(getPeoplesAction) {
      try {
         let morePeople = yield call(fetchPeoples, payload);
 
-        yield put(fillPeoples(morePeople))
+        yield put(getPeoplesSuccess(morePeople))
         }catch(error){
            yield put(getPeoplesError(error))
    }

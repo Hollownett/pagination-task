@@ -1,55 +1,73 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
 import API from "../utils/API"
 import * as actions from "../constants/actions"
-import { fillFilms, getFilmsError }  from "../actions/actions"
+import { getFilmsSuccess, getFilmsError }  from "../actions/actions"
 
-function  fetchFilms(){ 
-    return API.get(`films/`);
+function*  fetchFilms(){ 
+    let moreFilms = yield call(API.get,`films/`);
+    moreFilms = moreFilms.data.results;
+    yield all([...moreFilms.map( (item) => {
+      return  call(handlePlanets, item)
+     })])
+    yield all([...moreFilms.map( (item) => {
+      return call(handleCharacters, item)
+     })])
+     return moreFilms;
 }
 
-function fetchSome(param){
-  return API.get(param);
-}
-
-function* handleCharacters (persons){
+function* handleCharacters (film){
   const filmPersons = [];
-  console.log(persons);
   try {
-    yield all(persons.map((person) => {
-      let filmPerson = call(fetchSome,person);
-      filmPersons.push(filmPerson.data.name);
+    yield all(film.characters.map((person) => {
+      return call(fetchCharacter, person, filmPersons)
     }))
-    return filmPersons;
+    film.characters = filmPersons;
+    return film;
   } catch (e) {
     console.log(e);
   }
 };
 
-function* handlePlanets (planets){
+function* fetchCharacter(person, filmPersons){
+  try{
+    let filmPerson = yield call(API.get, person)
+    filmPersons.push(filmPerson.data.name)
+    return filmPersons;
+  } catch(e){
+    console.log(e);
+  }
+} 
+
+function* handlePlanets(film){
   const filmPlanets = [];
   try {
-    yield all( planets.map((planet) => {
-      let filmPlanet = call (fetchSome,planet);
-      filmPlanets.push(filmPlanet.data.name);
+    yield all( film.planets.map((planet) => {
+      return  call (fetchPlanets, planet, filmPlanets);
     }))
-    return filmPlanets;
+    film.planets = filmPlanets
+    return film;
   } catch (e) {
     console.log(e);
   }
 };
+
+function* fetchPlanets(planet, filmPlanets){
+  try{
+    let filmPlanet = yield call(API.get, planet)
+    filmPlanets.push(filmPlanet.data.name)
+    return filmPlanets
+  }catch(e){
+    console.log(e)
+  }
+}
 
 export function* getFilmsActionEffect() {
      try {
-        let moreFilm = yield call(fetchFilms);
-        moreFilm = moreFilm.data.results;
-        yield all (moreFilm.map((item) => {
-          //  item.persons  = call(handleCharacters(item.characters))
-          //  item.planet = call(handlePlanets,item.planets)
-          }))
-        yield put(fillFilms(moreFilm))
-        }catch(error){
-           yield put(getFilmsError(error))
-   }
+        let moreFilm = yield call(fetchFilms)
+        yield put(getFilmsSuccess(moreFilm))
+     } catch(e) {
+        yield put(getFilmsError(e))
+     }
 }
 
 export function* getFilmsActionWatcher(){

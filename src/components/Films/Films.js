@@ -4,14 +4,14 @@ import { Film } from "./Film/Film";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
 import { FilmsContainer } from "./components"
-import { getFilms } from "../../actions/actions";
+import { getFilmsRequest } from "../../actions/actions";
 
 const Films = () => {
   const films =  useSelector(state => state.films.films)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getFilms())
+    dispatch(getFilmsRequest())
   }, []);
 
  

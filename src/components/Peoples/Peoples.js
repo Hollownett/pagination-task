@@ -4,7 +4,7 @@ import { People } from "./People/People";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "react-loader-spinner";
 import { PeoplesContainer } from "./components"
-import { getPeoples } from "../../actions/actions";
+import { getPeoplesRequest } from "../../actions/actions";
 
 const Peoples = () => {
   const peoples =  useSelector(state => state.peoples.peoples)
@@ -13,7 +13,7 @@ const Peoples = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPeoples(page))
+    dispatch(getPeoplesRequest(page))
   }, [page]);
 
   const handlePage = () => {
