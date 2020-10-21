@@ -1,31 +1,22 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import API from "../utils/API"
 import * as actions from "../constants/actions"
 import { fillFilms, getFilmsError }  from "../actions/actions"
 
-async function  fetchFilms(){ 
-  try {
-    let moreFilm = await API.get(`films/`);
-    moreFilm = moreFilm.data.results;
-    await Promise.all(
-      moreFilm.map(async (item) => {
-        item.persons = await handleCharacters(item.characters);
-        item.planet = await handlePlanets(item.planets);
-      })
-    );
-    return moreFilm
-  } catch (e) {
-    console.log(e);
-  }
+function  fetchFilms(){ 
+    return API.get(`films/`);
 }
 
+function fetchSome(param){
+  return API.get(param);
+}
 
-const handleCharacters = async (persons) => {
+function* handleCharacters (persons){
   const filmPersons = [];
+  console.log(persons);
   try {
-    await Promise.all(
-    persons.map( async (person) => {
-      let filmPerson = await API.get(person);
+    yield all(persons.map((person) => {
+      let filmPerson = call(fetchSome,person);
       filmPersons.push(filmPerson.data.name);
     }))
     return filmPersons;
@@ -34,12 +25,11 @@ const handleCharacters = async (persons) => {
   }
 };
 
-const handlePlanets = async (planets) => {
+function* handlePlanets (planets){
   const filmPlanets = [];
   try {
-    await Promise.all(
-    planets.map( async (planet) => {
-      let filmPlanet = await API.get(planet);
+    yield all( planets.map((planet) => {
+      let filmPlanet = call (fetchSome,planet);
       filmPlanets.push(filmPlanet.data.name);
     }))
     return filmPlanets;
@@ -50,8 +40,13 @@ const handlePlanets = async (planets) => {
 
 export function* getFilmsActionEffect() {
      try {
-        let moreFilms = yield call(fetchFilms);
-        yield put(fillFilms(moreFilms))
+        let moreFilm = yield call(fetchFilms);
+        moreFilm = moreFilm.data.results;
+        yield all (moreFilm.map((item) => {
+          //  item.persons  = call(handleCharacters(item.characters))
+          //  item.planet = call(handlePlanets,item.planets)
+          }))
+        yield put(fillFilms(moreFilm))
         }catch(error){
            yield put(getFilmsError(error))
    }

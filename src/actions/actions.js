@@ -11,32 +11,21 @@ const getFilms = createAction(action.GET_FILMS_REQUEST)
 // Redux state triggering actions 
 
 // action creators for Peoples
-const getPeoplesError = error => {
-    return { type: action.GET_PEOPLES_ERROR, payload: error }
-}
+const getPeoplesError =  createAction(action.GET_PEOPLES_ERROR, error => error)
 
-const fillPeoples = peoples => {
-    return { type: action.GET_PEOPLES_SUCCESS, payload: peoples }
-}
+const fillPeoples = createAction(action.GET_PEOPLES_SUCCESS, peoples => peoples) 
 
 // action creators Planets
-const getPlanetsError = error => {
-    return { type: action.GET_PLANETS_ERROR, payload: error }
-}
+const getPlanetsError =  createAction(action.GET_PLANETS_ERROR, error => error) 
 
-const fillPlanets = planets => {
-    return { type: action.GET_PLANETS_SUCCESS, payload: planets }
-}
+const fillPlanets =  createAction(action.GET_PLANETS_SUCCESS, planets => planets) 
 
 // action creators for Films
-const getFilmsError = error => {
-    return { type: action.GET_FILMS_ERROR, payload: error }
-}
 
-const fillFilms = films => {
-    return { type: action.GET_FILMS_SUCCESS, payload: films }
-}
+const getFilmsError =  createAction(action.GET_FILMS_ERROR, error => error) 
 
+
+const fillFilms = createAction(action.GET_FILMS_SUCCESS, films => films) 
 
 export {
     getPeoples,

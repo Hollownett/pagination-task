@@ -51,8 +51,8 @@ const Films = () => {
               director={item.director}
               producer={item.producer}
               release_date={item.release_date}
-              person={item.persons}
-              planet={item.planet}
+              person={item.characters}
+              planet={item.planets}
             />
           );
         })}

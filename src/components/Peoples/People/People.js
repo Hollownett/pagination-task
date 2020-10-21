@@ -42,5 +42,5 @@ People.propTypes = {
   eye_color: PropTypes.string,
   birth_year: PropTypes.string,
   gender: PropTypes.string,
-  homeworld: PropTypes.string,
+  homeworld: PropTypes.object,
 };
